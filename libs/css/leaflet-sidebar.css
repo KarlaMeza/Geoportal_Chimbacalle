@@ -1,0 +1,100 @@
+.leaflet-sidebar {
+  position: absolute;
+  top: 186px;
+  bottom: 0;
+  width: 100%;
+  border-radius: 4px;
+ }
+  .leaflet-sidebar.collapsed {
+    background-color: #fff;
+    width: 26px; 
+    height: 25px}
+
+  @media (min-width: 1200px) {
+    .leaflet-sidebar {
+      width: 460px;
+     } }
+  .leaflet-sidebar-left {
+  left: 10px; }
+  .leaflet-sidebar-tabs, .leaflet-sidebar-tabs > ul {
+    width: 26px;
+    margin: 0;
+    padding: 0;
+    list-style-type: none; }
+    .leaflet-sidebar-tabs > li, .leaflet-sidebar-tabs > ul > li {
+      width: 100%;
+      height: 26px;
+      color: #333;
+      font-size: 10pt;
+      overflow: visible;
+      transition: all 80ms; }
+      .leaflet-sidebar-tabs > li:hover, .leaflet-sidebar-tabs > ul > li:hover {
+        color: #a7a1a1
+        background-color: #eee; }
+      .leaflet-sidebar-tabs > li.active, .leaflet-sidebar-tabs > ul > li.active {
+        color: #fff;
+        background-color: #a7a1a1 }
+      .leaflet-sidebar-tabs > li.disabled, .leaflet-sidebar-tabs > ul > li.disabled {
+        color: rgba(51, 51, 51, 0.4); }
+        .leaflet-sidebar-tabs > li.disabled:hover, .leaflet-sidebar-tabs > ul > li.disabled:hover {
+          background: transparent; }
+        .leaflet-sidebar-tabs > li.disabled > a, .leaflet-sidebar-tabs > ul > li.disabled > a {
+          cursor: default; }
+      .leaflet-sidebar-tabs > li > a, .leaflet-sidebar-tabs > ul > li > a {
+        display: block;
+        width: 100%;
+        height: 100%;
+        top:500px;
+        line-height: 26px;
+        color: inherit;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer; }
+  .leaflet-sidebar-tabs > ul + ul {
+    bottom: 0; }
+
+.leaflet-sidebar-content {
+  position: absolute;
+  top: 0px;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.712);
+  overflow-x: hidden;
+  }
+  .leaflet-sidebar-left .leaflet-sidebar-content {
+    left:26px;
+    right: 0; }
+  .leaflet-sidebar.collapsed > .leaflet-sidebar-content {
+    overflow-x: scroll; }
+
+.leaflet-sidebar-pane {
+  display: none;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  padding: 0 1px; }
+  .leaflet-sidebar-pane.active {
+    display: block; }
+.leaflet-sidebar-header {
+  height: 26px;
+  padding: 0 12px;
+  line-height: 26px;
+  font-size: 11pt;
+  color: rgb(0, 0, 0);
+  background-color: rgba(121, 112, 112, 0.658); }
+.leaflet-sidebar-close {
+  position: absolute;
+  top: 0;
+  height: 50px;
+  text-align: center;
+  cursor: pointer; }
+  .leaflet-sidebar-left .leaflet-sidebar-close {
+    right: 0; }
+.leaflet-sidebar {
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65); }
+
+
+
+
+
+
+
