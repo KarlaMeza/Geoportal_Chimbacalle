@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Geoportal de Delitos Chimbacalle</title>
+	<link rel="shortcut icon" type="./image/x-icon" href="libs/images/logo.ico" />
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  	<meta name="description" content="" />
+  	<meta name="author" content="" />  
+
+	<!-- Cargamos Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"/>
+	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+	
+	<!-- wms -->
+	<script src="libs/js/L.TileLayer.BetterWMS.js"></script>
+    
+	<!-- Enlace de jquery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- Enlace de solicitud de geoserver de Leaflet-->
+	<script src="libs/js/L.Geoserver.js"></script>
+    
+    <!-- Bootstrap  -->
+    <link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+	<script src="libs/bootstrap/js/bootstrap.min.js"></script>
+	<script src="libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+	
+	<!-- Leaflet Plugins -->
+	
+	<!-- Control de capas agrupadas -->
+	<link rel="stylesheet" href="libs/css/styledLayerControl.css" />
+	<script src="libs/js/styledLayerControl.js"></script>
+	
+    <!-- Capas con control deslizante de rango-->
+	<link rel="stylesheet" href="libs/css/leaflet-panel-layers.css"/>
+	<script src="libs/js/leaflet-panel-layers.js"></script>
+	
+	<!-- Control deslizante de rango -->
+	<link rel="stylesheet" href="https://unpkg.com/ion-rangeslider@2.2.0/css/ion.rangeSlider.css"/>
+	<script src="https://unpkg.com/ion-rangeslider@2.2.0/js/ion.rangeSlider.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/ion-rangeslider@2.2.0/css/ion.rangeSlider.skinNice.css"/>
+	
+	<!-- Estilos CSS  -->
+    <link rel="stylesheet" href="libs/css/templatemo-sixteen.css">
+	<link href="libs/css/styles.css" rel="stylesheet" />
+
+	<!-- Botón de registro -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+	<script src="libs/js/accordions.js"></script>
+
+	<!-- Impresión del mapa -->
+	<script src="libs/js/leaflet.browser.print.min.js"></script>
+
+	<!-- ícono de botón de registro -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="libs/js/custom.js"></script>
+
+	<!-- Barra lateral -->
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="libs/css/leaflet-sidebar.css" />
+	<script src="libs/js/leaflet-sidebar.js"></script>
+
+    <!-- Botón de pantalla completa -->
+	<link rel="stylesheet" href="libs/Leaflet.fullscreen/leaflet.fullscreen.css" />
+	<script src="libs/Leaflet.fullscreen/Leaflet.fullscreen.min.js" type="text/javascript" charset="utf-8"></script>
+
+	<!--Minimapa-->
+	<link rel="stylesheet" href="libs/css/Control.MiniMap.css"/>
+	<script src="libs/js/Control.MiniMap.js" type="text/javascript"></script>
+
+	<!--polilinea//medir linea-->
+	<link rel="stylesheet" href="libs/css/Leaflet.PolylineMeasure.css">
+	<script src="libs/js/Leaflet.PolylineMeasure.js.descarga"></script>
+
+	<!--polilinea//medir area-->
+	<link rel="stylesheet" href="libs/css/leaflet-area-draw.css">
+	<script src="libs/js/leaflet-area-draw.js.descarga"></script>
+	<script src="libs/js/leaflet-calculo-area.js.descarga"></script>
+
+	 <!-- Búsqueda -->
+	 <link rel="stylesheet" href="libs/css/leaflet-search.css" />
+	 <script src="libs/js/leaflet-search.js"></script>
+
+     <!-- Leyenda -->
+	 <link rel="stylesheet" href="libs/css/L.Control.HtmlLegend.css">
+ 
+	 <!-- Trasladar archivos GeoJSON al documento HTML -->
+	 <script src="libs/geojson/barrios.js"></script>
+	 <script src="libs/geojson/camaras.js"></script>
+	 <script src="libs/geojson/camarasexistentes.js"></script>
+	 <script src="libs/geojson/camaraspropuestas.js"></script>
+	 <script src="libs/geojson/alarmasexistentes.js"></script>
+	 <script src="libs/geojson/alarmaspropuestas.js"></script>
+
+	  <style>
+		#map { 
+				padding: 0;
+				margin-top: 79px;
+				margin-left: 0px;
+				height:100%;
+				border-radius:.125em;
+				border:2px solid #242929;
+				box-shadow: 0 0 8px #999;
+		}
+		html, body{
+				background-color: #232425;
+				color:#000000;
+	            font-family:Arial;
+        }
+		.leaflet-grab {
+			cursor: auto;
+			}
+
+		.leaflet-dragging .leaflet-grab{
+			cursor: move;
+			}
+		.elemento {
+    		width: 30px;
+    		height: 30px;
+    		position: relative;
+		}
+		.a {
+    		width: 30px;
+    		height: 30px;
+    		position: relative;
+		}
+		.coordinate{
+				position: absolute;
+				bottom: 6px;
+				left: 7%;
+				background-color: #e7e4dd8a;
+				border: 1px;
+                font-size: 11px;
+		}
+		.icon {
+    			display: inline-block;
+				height: 20px;
+				width: 20px;
+			  }
+
+		/* ICONS */
+		.icon-alarmas_existentes {
+				background: url('libs/images/alarmas_existentes2.png') center center no-repeat;
+				}
+		.icon-alarmas_propuestas {
+				background: url('libs/images/alarmas_propuestas2.png') center center no-repeat;
+				}
+		.icon-cámaras_existentes {
+				background: url('libs/images/camaras_domo_existentes.png') center center no-repeat;
+				}
+		.icon-cámaras_propuestas {
+				background: url('libs/images/camaras_domo_propuestas.png') center center no-repeat;
+				}
+		
+		.cámaras.search-tip b {
+			background: rgba(146, 146, 146, 0.753);
+			margin-left: 20px;
+			display: inline-block;
+			clear: left;
+			padding: 0 4px;
+		}
+        .alarmas.search-tip b {
+			background: rgba(69, 112, 151, 0.753);
+			margin-left: 60px;
+			display: inline-block;
+			clear: left;
+			padding: 0 4px;
+		}
+		.barrios.search-tip b {
+			background: rgba(88, 151, 69, 0.753);
+			margin-left: 60px;
+			display: inline-block;
+			clear: left;
+			padding: 0 4px;
+		}
+	  </style>
+	 
+  </head>
+
+  <body>
+    <!-- Inicio del precargador  -->
+    <div id="preloader">
+    </div>
+
+    <!-- Encabezado -->
+    <header class="">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container">
+		  <img src="libs/images/logo_espe.png" alt> 
+		  <img src="libs/images/ecu.png" alt>
+          <a class="navbar-brand" href="index.html"><h2>Geoportal de Delitos <em>Chimbacalle</em></h2></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="true" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              	<li class="nav-item">
+                	<a class="nav-link" href="geoservicios.html">Geoservicios</a>
+              	</li>
+              	<li class="nav-item">
+                	<a class="nav-link" href="http://localhost:8080/geonetwork/srv/spa/catalog.search#/home">Catálogo de Metadatos</a>
+              	</li>
+              	<li class="nav-item active">
+                	<a class="nav-link" href="index.html">Geovisor</a>
+              	</li>
+			  	<li class="nav-item">
+                	<a class="nav-link" href="cesium.html">Visor 3D</a>
+              	</li>
+			  	<!-- Barra de navegación-->
+			  	<li class="nav-item dropdown">
+                	<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+			  	<ul class="dropdown-menu dropdown-menu-end" >
+                    <nav class="sb-sidenav accordion sb-sidenav-dark"style="margin-left: 0px;"id="sidenavAccordion">  
+						<a class="nav-link" href="http://localhost:8012/Geoportal/contacts.html">Inicio</a>   
+                        <a class="nav-link" href="http://localhost:8012/Geoportal/login.php">Cerrar  Sesión</a>
+                    </nav>
+                </ul>
+             	 </li>
+            </ul>
+        </div>
+        </div>
+      </nav>
+    </header>
+
+  <!-- Contenido de página -->
+  <div class="col-md-8"></div>
+
+  <!-- Barra lateral -->
+    <div id="sidebar" class="leaflet-sidebar collapsed">
+        <!-- nav tabs -->
+        <div class="leaflet-sidebar-tabs">
+            <!-- top aligned tabs -->
+            <ul role="tablist">
+                <li><a href="#autopan" role="tab"><i class="fa fa-download" title="Descargas"></i></a></li>
+            </ul>
+        </div>
+
+        <!-- CONTENIDO DEL PANEL DESPLEGABLE -->
+        <div class="leaflet-sidebar-content">
+
+            <!-- Descargas de Información -->
+            <div class="leaflet-sidebar-pane" id="autopan">
+                <h1 class="leaflet-sidebar-header">
+                    Descarga de Información Geográfica 
+                    <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h1>
+                <p>
+					<div class="col-lg-12"></div>
+							  <br><h6> Capas vectoriales </h6><br> 
+							  <table class="footable table table-stripped default footable-loaded" data-page-size="12" data-filter="#filter">
+									<thead>
+									    <tr>
+										<th class="footable-visible footable-first-column footable-sortable">Nombre de la capa<span class="footable-sort-indicator"></span></th>
+										<th class="footable-visible footable-sortable">Fuente<span class="footable-sort-indicator"></span></th>
+										<th data-hide="phone,tablet" class="footable-visible footable-sortable">&nbsp;<span class="footable-sort-indicator"></span></th>
+										<th data-hide="phone,tablet" class="footable-visible footable-last-column footable-sortable">Shape<span class="footable-sort-indicator"></span></th>
+									    </tr>
+									</thead>
+									<tbody>
+									    <tr class="gradeX footable-even" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Alarmas comunitarias existentes</td>
+										<td class="footable-visible">Observatorio Metropolitano de Seguridad Ciudadana (E)</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3Aalarmas_existentes&maxFeatures=50&outputFormat=shape-zip&srsName=epsg:4326"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+									  	</tr>
+										<tr class="gradeX footable-even" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Alarmas comunitarias propuestas</td>
+										<td class="footable-visible">Elaboración propia</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3Aalarmas_propuestas&maxFeatures=50&outputFormat=shape-zip&srsName=epsg:4326"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+										</tr>
+										<tr class="gradeX footable-odd" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Unidades constructivas</td>
+										<td class="footable-visible">Dirección Metropolitana de Catastro GAD del Distrito Metropolitano de Quito</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3Aconstrucciones&maxFeatures=50&outputFormat=shape-zip&srsName=epsg:4326"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+										</tr> 
+										<tr class="gradeX footable-odd" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Barrios</td>
+										<td class="footable-visible">Secretaría General de Planificación del Distrito Metropolitano de Quito</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3ABarrios&maxFeatures=50&outputFormat=shape-zip&srsName=epsg:4326"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+									  	</tr>   
+										<tr class="gradeX footable-odd" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Arbolado urbano</td>
+										<td class="footable-visible">Elaboración propia</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3Aarboles&maxFeatures=50&outputFormat=shape-zip&srsName=epsg:4326"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+									  	</tr>  
+										<tr class="gradeX footable-odd" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Líneas de visión cámaras existentes</td>
+										<td class="footable-visible">Elaboración propia</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3Alineas_de_vision_camaras_existentes&maxFeatures=50&outputFormat=shape-zip&srsName=epsg:4326"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+									  	</tr>
+										<tr class="gradeX footable-odd" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Líneas de visión cámaras propuestas</td>
+										<td class="footable-visible">Elaboración propia</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3Alineas_de_vision_camaras_propuestas&maxFeatures=50&outputFormat=shape-zip&srsName=epsg:4326"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+										</tr>
+										<tr class="gradeX footable-odd" >
+									    <td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Cuencas visuales cámaras existentes</td>
+										<td class="footable-visible">Elaboración propia</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3Acuencas_visuales_camaras_existentes&maxFeatures=50&outputFormat=shape-zip&srsName=epsg:4326"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+										</tr>
+										</tr>
+										<tr class="gradeX footable-odd" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Cuencas visuales cámaras propuestas</td>
+										<td class="footable-visible">Elaboración propia</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3Acuencas_visuales_camaras_propuestas&maxFeatures=50&outputFormat=shape-zip&srsName=epsg:4326"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+										</tr>
+										<tr class="gradeX footable-odd" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Cuencas auditivas alarmas existentes</td>
+										<td class="footable-visible">Elaboración propia</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3Acuencas_auditivas_alarmas_existentes&maxFeatures=50&outputFormat=shape-zip&srsName=epsg:4326"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+										</tr>
+										<tr class="gradeX footable-odd" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Cuencas auditivas alarmas existentes</td>
+										<td class="footable-visible">Elaboración propia</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3Acuencas_auditivas_alarmas_propuestas&maxFeatures=50&outputFormat=shape-zip&srsName=epsg:4326"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+										</tr>
+										<tr class="gradeX footable-even" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Cámaras de videovigilancia existentes</td>
+										<td class="footable-visible"> SIS ECU 911</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3Acamaras_existentes&maxFeatures=50&outputFormat=shape-zip&srsName=epsg:4326"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+									    </tr>
+										</tr>
+										<tr class="gradeX footable-even" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Cámaras de videovigilancia propuestas</td>
+										<td class="footable-visible"> Elaboración propia</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3Acamaras_propuestas&maxFeatures=50&outputFormat=shape-zip&srsName=epsg:4326"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+										</tr>
+								    </tbody>                                  
+								</table>	
+								
+								<br><h6> Capas raster </h6><br> 
+							  <table class="footable table table-stripped default footable-loaded" data-page-size="12" data-filter="#filter">
+									<thead>
+									    <tr>
+										<th class="footable-visible footable-first-column footable-sortable">Nombre de la capa<span class="footable-sort-indicator"></span></th>
+										<th class="footable-visible footable-sortable">Fuente<span class="footable-sort-indicator"></span></th>
+										<th data-hide="phone,tablet" class="footable-visible footable-sortable">&nbsp;<span class="footable-sort-indicator"></span></th>
+										<th data-hide="phone,tablet" class="footable-visible footable-last-column footable-sortable">TIF<span class="footable-sort-indicator"></span></th>
+									    </tr>
+									</thead>
+									<tbody>
+									    <tr class="gradeX footable-even" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Modelo digital de superficie</td>
+										<td class="footable-visible">Elaboración propia</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="libs/images/MDS.tif"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+									  	</tr>
+										<tr class="gradeX footable-odd" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Ortofoto</td>
+										<td class="footable-visible">Instituto Geográfico Militar</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="libs/images/Ortofoto.tif"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+									  	</tr>
+										<tr class="gradeX footable-odd" >
+										<td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Modelo digital del terreno</td>
+										<td class="footable-visible">Instituto Geográfico Militar</td>
+										<td class="footable-visible">&nbsp;</td>
+										<td class="center footable-visible footable-last-column"><a href="libs/images/MDT.tif"><img src="libs/images/download.png" width="22" height="18" alt=""></a></td>
+										</tr>  
+								    </tbody>                                  
+								</table>	
+					</div>
+                </p>
+            </div>
+        </div>
+    </div>
+
+	<!-- ********* CARGAMOS CAPAS AL GEOPORTAL ******** -->
+	<div id="map">
+		<div class="leaflet-control coordinate"></div>
+	</div>
+	<script> 
+		var map = L.map('map', {fullscreenControl: true,center: [-0.243, -78.513], zoom: 15 });
+		
+		//Mapas base
+		var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
+			minZoom: 14,
+			maxZoom: 19,});
+			
+		var TopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+			minZoom: 14,
+			maxZoom: 19,
+			attribution: 'OpenTopoMap'});
+
+		var esri_img = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+			minZoom: 14,
+			maxZoom: 19,
+		    attribution: '©ESRI'});
+
+		//MAPAS DE LA BASE DE DATOS POSTGIS 
+		//Cartografía base
+
+		var wmsbarrios = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:Barrios",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});//wmsbarrios.addTo(map);
+			
+		var wmschimbacalle = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:Parroquia_Chimbacalle",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+	
+		var wmsconstrucciones = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:construcciones",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});//wmsconstrucciones.addTo(map);
+
+		var wmsarboles = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:arboles",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});//wmsarboles.addTo(map);
+
+		var wmscamarasexistentes = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:camaras_existentes",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+
+		var wmsalarmasexistentes = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:alarmas_existentes",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+
+		var wmsortofoto = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:Ortofoto",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',}); 
+		
+		var wmsMDT = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:MDT",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+			
+	    //Capas del análisis espacial del sistema de monitoreo delictivo
+
+		var wmscamaraspropuestas = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:camaras_propuestas",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+
+		var wmsalarmaspropuestas = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:alarmas_propuestas",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+
+        var wmscuencasauditivasexistentes = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:cuencas_auditivas_alarmas_existentes",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+		
+		var wmscuencasauditivaspropuestas = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:cuencas_auditivas_alarmas_propuestas",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+
+		var wmscuencasvisualescamarasexistentes = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:cuencas_visuales_camaras_existentes",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+
+		var wmscuencasvisualescamaraspropuestas = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:cuencas_visuales_camaras_propuestas",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+		
+		var wmslineasdevisioncamarasexistentes = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:lineas_de_vision_camaras_existentes",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+
+		var wmslineasdevisioncamaraspropuestas = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:lineas_de_vision_camaras_propuestas",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+		
+		var wmsMDS = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:MDS",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+		
+		//Emergencias SIS ECU 911
+			
+		var wmsdelitos2018 = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:delitos_2018",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+			
+		var wmsdelitos2019 = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:delitos_2019",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+		
+		var wmsdelitos2020 = L.tileLayer.wms("http://localhost:8080/geoserver/chimbacalle/wms?",{
+			layers:"chimbacalle:delitos_2020",
+			format: 'image/png',
+			transparent: true,
+			version: '1.1.1',});
+
+		// Capas geojson
+		
+		function iconByName(name) {
+			return '<i class="icon icon-'+name+'"></i>';
+		}
+		function featureToMarker(feature, latlng) {
+			return L.marker(latlng, {
+			icon: L.divIcon({
+			className: 'marker-'+feature.properties.categoria,
+			html: iconByName(feature.properties.categoria),
+		})
+
+		}).bindPopup(feature.properties.categoria+'<br><b>'+feature.properties.name+'</b>'+
+					"DIRECCIÓN: " + feature.properties.direccion+'</b>');
+		}
+		var geojson_alarmasexistentes = L.geoJson(alarmas_existentes, {pointToLayer: featureToMarker});
+		var geojson_alarmaspropuestas = L.geoJson(alarmas_propuestas, {pointToLayer: featureToMarker});
+		var geojson_camarasexistentes = L.geoJson(camarasexistentes, {pointToLayer: featureToMarker});
+		var geojson_camaraspropuestas = L.geoJson(camaraspropuestas, {pointToLayer: featureToMarker});
+
+	// INICIO LEYENDAS
+
+	//Arbolado urbano
+	var layerLegend_arboles = L.Geoserver.legend("http://localhost:8080/geoserver/chimbacalle/wms",{
+	layers: "chimbacalle:arboles",
+	style: 'arboles',
+	});
+	
+	//Mapas de calor		
+	var layerLegend_heatmaps = L.Geoserver.legend("http://localhost:8080/geoserver/chimbacalle/wms",{
+	layers: "chimbacalle:heatmap_emergencias_2020",
+	style: 'mapas_de_calor',
+	});
+		
+	//Control de leyendas en capas
+	map.on('overlayadd', function(sl) { 
+										if (sl.name === 'Cuencas visuales cámaras propuestas') 
+													{layerLegend_cuencas_visuales_camaras_propuestas.addTo(map)}
+										else if (sl.name === 'árboles') 
+													{layerLegend_arboles.addTo(map)}
+										else if (sl.name === 'Año 2018') 
+													{layerLegend_heatmaps.addTo(map)}
+										else if (sl.name === 'Año 2019') 
+													{layerLegend_heatmaps.addTo(map)}
+										else if (sl.name === 'Año 2020') 
+													{layerLegend_heatmaps.addTo(map)}					
+											 }
+				  );
+				  
+	map.on('overlayremove', function(sl) { 
+										if (sl.name === 'Cuencas visuales cámaras propuestas') 
+													{layerLegend_cuencas_visuales_camaras_propuestas.remove(map)}
+										else if (sl.name === 'árboles') 
+													{layerLegend_arboles.remove(map)}	
+										else if (sl.name === 'Año 2018') 
+													{layerLegend_heatmaps.remove(map)}
+										else if (sl.name === 'Año 2019') 
+													{layerLegend_heatmaps.remove(map)}
+										else if (sl.name === 'Año 2020') 
+													{layerLegend_heatmaps.remove(map)}
+											 }
+				  );
+
+	map.on("browser-print-start", function(e){
+										layerLegend_arboles.addTo(e.printMap);
+				  });
+
+	// FIN LEYENDAS
+	
+	//Control de capas
+	var baseMaps = [
+			                { 
+								groupName : "Mapas Base",
+								expanded : false,
+								layers    : {
+									"Satélite": esri_img,
+									"TopoMap": TopoMap,
+									"OpenStreetMap": osm,
+								}
+					        } 							
+			];
+					
+	var overlays = [
+							{
+								groupName : "Cartografía",
+								expanded : false,
+								layers    : { 
+									"Modelo digital del terreno MDT": wmsMDT,
+									"Ortofoto": wmsortofoto,
+									"Parroquia Chimbacalle": wmschimbacalle,
+									"Barrios": wmsbarrios,
+									"Unidades Constructivas": wmsconstrucciones,
+									"árboles":wmsarboles,
+									"Cámaras existentes": wmscamarasexistentes,
+									"Cámaras existentes geojson": geojson_camarasexistentes,
+									"Alarmas existentes geojson": geojson_alarmasexistentes,
+									"Alarmas existentes": wmsalarmasexistentes
+								}	
+                            },{
+								groupName : "Productos generados",
+								expanded : false,
+								layers    : { 
+									"Modelo digital de superficie MDS": wmsMDS,
+									"Cámaras propuestas": wmscamaraspropuestas,
+									"Cámaras propuestas geojson": geojson_camaraspropuestas,
+									"Alarmas propuestas": wmsalarmaspropuestas,
+									"Alarmas propuestas geojson": geojson_alarmaspropuestas,
+									"Cuencas visuales cámaras existentes": wmscuencasvisualescamarasexistentes,
+									"Cuencas visuales cámaras propuestas": wmscuencasvisualescamaraspropuestas,
+									"Cuencas auditivas alarmas existentes": wmscuencasauditivasexistentes,
+									"Cuencas auditivas alarmas propuestas": wmscuencasauditivaspropuestas,
+									"Líneas de visión cámaras existentes": wmslineasdevisioncamarasexistentes,
+									"Líneas de visión cámaras propuestas": wmslineasdevisioncamaraspropuestas
+								}	
+                            }, {
+								groupName : "Emergencias reportadas SIS ECU 911",
+								expanded : false,
+								layers    : { 
+									"Delitos 2018": wmsdelitos2018,
+									"Delitos 2019": wmsdelitos2019,
+									"Delitos 2020": wmsdelitos2020		
+								}	
+                            }				 
+			];
+	esri_img.addTo(map);	
+	var control = L.Control.styledLayerControl(baseMaps, overlays);
+			map.addControl(control);
+
+	//CONTROL DE BÚSQUEDA PARA VARIAS CAPAS
+
+	//Pop up 
+    function iconByName(name) {
+	return '<i class="icon icon-'+name+'"></i>';
+	}
+	function featureToMarker(feature, latlng) {
+	return L.marker(latlng, {
+		icon: L.divIcon({
+			className: 'marker-'+feature.properties.categoria,
+			html: iconByName(feature.properties.categoria),
+		})
+	}).bindPopup("<div style=text-align:center><h1>"+ feature.properties.categoria + '<br>' + '<br>' +
+					"<h1></div><hr><table><tr>ID: " + feature.properties.name + '<br>' +
+					"ACCIÓN RECOMENDADA: " + feature.properties.accion + '<br>' + '<br>' +
+					"Emergencias Año 2020: " + feature.properties.emer_2020 + '<br>' +
+					"Emergencias Año 2019: " + feature.properties.emer_2019 + '<br>' +
+					"Emergencias Año 2018: " + feature.properties.emer_2018 + '<br>' +
+					"Emergencias Totales: " + feature.properties.emer_total + '<br>' 
+					);
+	}
+
+	//Popup WFS
+	var wfscamaras = L.Geoserver.wfs("http://localhost:8080/geoserver/chimbacalle/wfs",{
+    layers:"chimbacalle:camaras_existentes",
+	onEachFeature: function (feature, layer){
+	console.log(feature);
+	layer.bindPopup("TIPO: " + feature.properties.tipo + '<br>' +
+					"ACCIÓN RECOMENDADA: " + feature.properties.accion + '<br>' + '<br>' +
+					"Emergencias Año 2020: " + feature.properties.emer_2020 + '<br>' +
+					"Emergencias Año 2019: " + feature.properties.emer_2019 + '<br>' +
+					"Emergencias Año 2018: " + feature.properties.emer_2018 + '<br>' +
+					"Emergencias Totales: " + feature.properties.emer_total + '<br>' 
+					
+					);
+	},
+	});
+    //wfscamaras.addTo(map);
+	
+	//Se agrupan capas de búsqueda 
+		var poiLayers = L.layerGroup([
+			//L.geoJson(alarmas_propuestas, {pointToLayer: featureToMarker }),
+			//L.geoJson(camaraspropuestas, {pointToLayer: featureToMarker}),
+			//L.geoJson(barrios, {style: function(feature) {return {color: feature.properties.color };}, 
+	//onEachFeature: function(feature, marker) {marker.bindPopup("Barrio: " + feature.properties.name);}}),
+		])
+	
+	//Control de búsqueda 
+	var searchControl = new L.control.search({
+		layer: poiLayers,
+		propertyName: 'name',
+		//Muestra las categorías de cada capa en el buscador
+		buildTip: function(text, val) {
+			var type = val.layer.feature.properties.categoria;
+			return '<a href="#" class="'+type+'">'+text+'<b>'+type+'</b></a>';
+		}
+	});
+
+	searchControl.on('search:locationfound', function(e) {
+		e.layer.setStyle({fillColor: '#3f0'});
+		if(e.layer._popup)
+			e.layer.openPopup();
+	}).on('search:collapsed', function(e) 
+
+	{
+		poiLayers.eachLayer(function(layer) {	//restore feature color
+			poiLayers.resetStyle(layer);
+		});	
+	});
+	map.addControl(searchControl);
+
+	//Capas con control de opacidad
+	L.control.panelLayers(true,[{
+		group: "Mapas de Calor Emergencias",
+		layers: [
+
+		    {
+				active: false,
+				name: "Año 2018",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_emergencias_2018",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			},
+			{
+				active: false,
+				name: "Año 2019",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_emergencias_2019",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			},
+			{
+				active: false,
+				name: "Año 2020",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_emergencias_2020",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			}
+		]
+	},{group: "Venta Consumo de Drogas",
+		layers: [
+			{
+				active: false,
+				name: "Año 2018",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_consumo_2018",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			},
+			{
+				active: false,
+				name: "Año 2019",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_consumo_2019",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			},
+			{
+				active: false,
+				name: "Año 2020",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_consumo_2020",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			}
+		]
+	},{group: "Robos",
+		layers: [
+			{
+				active: false,
+				name: "Año 2018",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_robo_2018",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			},
+			{
+				active: false,
+				name: "Año 2019",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_robo_2019",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			},
+			{
+				active: false,
+				name: "Año 2020",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_robo_2020",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			}
+		]
+	},{group: "Libación en Espacios Públicos",
+		layers: [
+			{
+				active: false,
+				name: "Año 2018",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_libacion_2018",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			},
+			{
+				active: false,
+				name: "Año 2019",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_libacion_2019",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			},
+			{
+				active: false,
+				name: "Año 2020",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_libacion_2020",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			}
+		]
+	},{group: "Altercados",
+		layers: [
+			{
+				active: false,
+				name: "Año 2018",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_altercados_2018",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			},
+			{
+				active: false,
+				name: "Año 2019",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_altercados_2019",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			},
+			{
+				active: false,
+				name: "Año 2020",
+				layer: {
+					type: "tileLayer.wms",
+					args: ["http://localhost:8080/geoserver/chimbacalle/wms?", {
+							layers: "chimbacalle:heatmap_altercados_2020",
+							format: 'image/png',
+							transparent: true
+						}
+					]
+				}
+			}
+		]
+	}
+
+	], {
+		position: 'bottomright',
+		buildItem: function(item) {
+            var $slider = $('<div class="layer-slider">');
+            var $input = $('<input type="text" value="' + item.layer.options.opacity + '" />');
+            $slider.append($input);
+            $input.ionRangeSlider({
+                min: 0.1,
+                max: 1,
+                step: 0.01,
+                hide_min_max: true,
+                hide_from_to: true,
+                from: item.layer.options.opacity,
+                onChange: function(o) {
+                    item.layer.setOpacity(o.from);
+                }
+            });
+            return $slider[0];
+    	}
+	}).addTo(map);
+
+	// Botón barra lateral
+	var sidebar = L.control.sidebar({ container: 'sidebar'})
+	.addTo(map)
+         
+        sidebar.on('content', function (ev) {
+            switch (ev.id) {
+                case 'autopan':
+                sidebar.options.autopan = true;
+                break;
+                default:
+                sidebar.options.autopan = false;
+            }
+        });
+
+    //Botón de impresión
+	L.control.browserPrint({
+		printModes: [
+			L.control.browserPrint.mode.landscape("Vista completa"),
+			L.control.browserPrint.mode.custom("Seleccione el área", "A3")
+			],title:'Imprimir Mapa'}).addTo(map);
+
+    //Mini mapa
+	var osm2 = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
+			minZoom: 8,
+			maxZoom: 10,});
+	var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true, position: 'topleft' }).addTo(map);
+	
+   //Coordenadas del cursor 
+    map.on('mousemove', function (e){
+	    document.getElementsByClassName('coordinate')[0].innerHTML = 'lat: ' + e.latlng.lat + ' lng: ' + e.latlng.lng;
+		console.log('lat: ' + e.latlng.lat, ' lng:' + e.latlng.lng)
+    })
+	
+	// ScaleControl 
+	var scale = L.control.scale({imperial:false}).addTo(map);
+	</script>
+  </body>
+</html>
