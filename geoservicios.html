@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Geoportal de Delitos Chimbacalle</title>
+    <link rel="shortcut icon" type="./image/x-icon" href="libs/images/logo.ico" />
+    	<!-- Cargamos Leaflet -->
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"/>
+      <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+      
+      <!-- wms -->
+      <script src="libs/js/L.TileLayer.BetterWMS.js"></script>
+        
+      <!-- Enlace de jquery -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="libs/jquery/jquery.min.js"></script>
+    
+      <!-- Enlace de solicitud de geoserver de Leaflet-->
+      <script src="libs/js/L.Geoserver.js"></script>
+        
+      <!-- Bootstrap  -->
+      <link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+      <script src="libs/bootstrap/js/bootstrap.min.js"></script>
+    
+      <link href="libs/bootstrap/css/bootstrap.bundle.min.css" rel="stylesheet"/>
+      <script src="libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+      <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.css">
+      <script src="libs/jquerys/jquery-3.3.1.min.js.descarga"></script>
+      <script src="libs/bootstrap/js/bootstrap.min.js.descarga"></script>
+
+      <!-- Leaflet Plugins -->
+      
+      <!-- Barra de búsqueda -->
+      <link rel="stylesheet" href="libs/css/leaflet-search.css"/>
+      <script src="libs/js/leaflet-search.js"></script>
+      
+      <!-- Control de capas agrupadas -->
+      <link rel="stylesheet" href="libs/css/leaflet.groupedlayercontrol.css"/>
+      <script src="libs/js/leaflet.groupedlayercontrol.js"></script>
+      
+      <!-- Capas con control deslizante de rango-->
+      <link rel="stylesheet" href="libs/css/leaflet-panel-layers.css"/>
+      <script src="libs/js/leaflet-panel-layers.js"></script>
+      
+      <!-- Control deslizante de rango -->
+      <link rel="stylesheet" href="https://unpkg.com/ion-rangeslider@2.2.0/css/ion.rangeSlider.css"/>
+      <script src="https://unpkg.com/ion-rangeslider@2.2.0/js/ion.rangeSlider.js"></script>
+      <link rel="stylesheet" href="https://unpkg.com/ion-rangeslider@2.2.0/css/ion.rangeSlider.skinNice.css"/>
+      
+      <!-- Estilos CSS  -->
+      <link rel="stylesheet" href="libs/css/templatemo-sixteen.css">
+      <link href="libs/css/styles.css" rel="stylesheet" />
+    
+      <!-- Botón de registro -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+      <script src="libs/js/accordions.js"></script>
+    
+      <!-- Impresión del mapa -->
+      <script src="libs/js/leaflet.browser.print.min.js"></script>
+    
+      <!-- ícono de botón de registro -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+      
+      <script src="libs/js/custom.js"></script>
+
+      <style>
+        html, body{
+            background:#86808099;
+            color:#020203;
+                  font-family:Arial;
+            }
+        .bg-geo{
+				    background-color: #fff;
+            border-radius: 8px;
+			      }
+        </style>
+
+  <body>
+
+    <!-- ***** Inicio del precargador ***** -->
+    <div id="preloader">
+        <div class="jumper">
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+     <!-- Encabezado -->
+     <header class="">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container">
+          <img src="libs/images/ecu.png" alt>
+          <a class="navbar-brand" href="index.html"><h2> Geoportal de Delitos <em>Chimbacalle</em></h2></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="true" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="geoservicios.html">Geoservicios</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="http://localhost:8080/geonetwork/srv/spa/catalog.search#/home">Catálogo de Metadatos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="index.html">Geovisor</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="cesium.html">Visor 3D</a>
+              </li>
+			  <!-- Barra de navegación-->
+			  <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+			  <ul class="dropdown-menu dropdown-menu-end" >
+                    <nav class="sb-sidenav accordion sb-sidenav-dark" style="margin-left: 0px;"id="sidenavAccordion"> 
+                     <a class="nav-link" href="http://localhost:8012/Geoportal/contacts.html">Inicio</a>      
+                     <a class="nav-link" href="http://localhost:8012/Geoportal/login.php">Cerrar Sesión</a>
+                    </nav>
+                  </ul>
+              </li>
+              </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    
+
+    <!-- Page Content -->
+    <div class="page-heading products-heading header-text">
+      
+      <div class="products">
+       
+            <div class="col-lg-8 col-md-10 all des">
+              <br><strong>Geoservicios Disponibles</strong><br>
+              <br>Se han implementado los geoservicios WMS y WFS<a rel="nofollow noopener"  target="_blank"></a></p>
+            <div class="filters">
+              <ul>
+                <li data-filter=".des"class="btn btn-primary" data-target="#modal_wms" data-toggle="modal">WMS</li>
+                <li data-filter=".dev"class="btn btn-primary" data-target="#modal_wfs" data-toggle="modal">WFS</li>
+              </ul>
+            </div>
+       
+
+            <div class="filters-content">
+              <div class="modal" tabindex="-1" role="dialog" id="modal_wms" style="display: none;" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header bg-geo white">
+                      <strong>WMS</strong>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="white" aria-hidden="true">×</span>
+                      </button>
+                    </div>
+               
+
+                    <div class="modal-body">
+                      <p>Puede emplear el servicio web WMS copiando el siguiente enlace</p>
+                      <div class="modal-footer bg-geo white">
+                        <h1 id="dir_wms" class="m-auto"><b>http://localhost:8080/geoserver/chimbacalle/wms?</b></h1>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="filters-content">
+                <div class="modal" tabindex="-1" role="dialog" id="modal_wfs" style="display: none;" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header bg-geo white">
+                        <strong>WFS</strong>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="white" aria-hidden="true">×</span>
+                        </button>
+                      </div>
+                      
+                      <div class="modal-body">
+                        <p>Puede emplear el servicio web WFS copiando el siguiente enlace</p>
+                        <div class="modal-footer bg-geo white">
+                          <h1 id="dir_wfs" class="m-auto"><b>http://localhost:8080/geoserver/chimbacalle/wfs</b></h1>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              Es posible enlazar los geoservicios de todas las capas disponibles del geoportal a sistemas de información geográfica independientes como QGis, Kosmos, ArcGis, MapInfo, etc. <br>
+              
+              <br><strong>Ejemplo de conexión WMS desde QGIS</strong><br>
+              <br>Para establecer una conexión WMS desde QGIS, se debe hacer click derecho sobre la opción WMS/WMTS y seleccionar "Conexión nueva...", se desplegará una ventana emergente
+              en donde se deberá asignar un nombre a la nueva conexión, se procede a copiar el link del geoservicio WMS y pegarlo en el campo URL y seleccionar la opción "Aceptar". Finalmente para visualizar
+              las capas disponibles, desplegar la pestaña WMS/WMTS y arrastrar las capas deseadas hacia el panel de capas de QGIS<br>
+              <a rel="nofollow noopener"  target="_blank"></a></p>
+              
+              <br><img src="libs/images/wms_conexion.jpg" alt><br>
+
+              <br><br>
+              Como se observa a continuación, una vez establecida la conexión con el servidor de mapas, las capas se pueden visualizar conservando su simbología de origen<a rel="nofollow noopener"  target="_blank"></a></p>
+              <strong>Ejemplo de visualización de capas mediante conexión WMS</strong><br>
+              <br><img src="libs/images/wms_capas.jpg" alt><br>
+
+              <br><strong>Ejemplo de visualización de capas en ArcGIS ArcScence</strong><br>
+              <br><img src="libs/images/chimbacalle.jpg" alt><br>
+              <br>
+              <br>
+              <br>
+              <br>
+              </div>
+      </div>
+
+      
+    </div>
+  </body>
+</html>

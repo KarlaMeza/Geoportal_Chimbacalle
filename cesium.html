@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Use correct character set. -->
+    <meta charset="utf-8" />
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Geoportal de Delitos Chimbacalle</title>
+	<link rel="shortcut icon" type="./image/x-icon" href="libs/images/logo.ico" />
+
+    <script src="http://localhost:8012/Geoportal/libs/Cesium-1.84/Build/Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="libs/Cesium-1.84/Source/Widgets/widgets.css">
+    <!--<link href="https://cesium.com/downloads/cesiumjs/releases/1.84/Build/Cesium/Widgets/widgets.css" rel="stylesheet">-->
+    <script src="http://localhost:8012/Geoportal/libs/Cesium-1.84/Apps/Sandcastle/Sandcastle-header.js"></script>
+    
+    <!-- Cesium -->
+    <link rel="stylesheet" href="libs/css/3d-1.0.0.css">
+
+    <!-- Bootstrap -->
+    <link href="./vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Estilos CSS  -->
+    <link rel="stylesheet" href="libs/css/templatemo-sixteen.css">
+    <link href="libs/css/styles.css" rel="stylesheet" />
+   <!-- Botón de registro -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+  
+</head>
+<style>
+    @import url(http://localhost:8012/Geoportal/libs/Cesium-1.84/Apps/Sandcastle/CesiumSandcastle.css);
+    @import url(http://localhost:8012/Geoportal/libs/Cesium-1.84/Apps/Sandcastle/templates/bucket.css);
+
+  
+    .cesium-geocoder-searchButton {
+    top: 16px;
+    border-radius: 6px;
+
+    }
+    .cesium-viewer-geocoderContainer .cesium-geocoder-input {
+    margin-top: 15px;
+    border-radius: 6px;
+    color: #fff;
+    fill: #fff;
+    background: rgb(58, 58, 58);
+    border-color: #aef;
+    box-shadow: 0 0 8px #fff;
+    }
+    html, body{
+            background-color: #999;
+            color:#000000;
+            font-family:Arial;
+    }
+    .cesium-widget, .cesium-widget canvas {
+    top: 0;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    }
+    .cesium-infoBox {
+    display: block;
+    position: absolute;
+    top: 150px;
+    left: 10px;
+    width: 30%;
+    font-size: 16px;
+    max-width: 400px;
+    background: rgba(38,38,38,.95);
+    color: #edffff;
+    border: 1px solid rgba(68, 68, 68, 0.774);
+    border-top-right-radius: 6px;
+    border-end-end-radius: 6px;
+  }
+    .cesium-button {
+    top: 80px;
+    color: #fff;
+    fill: #fff;
+    background: rgb(58, 58, 58);
+    border-color: #aef;
+    box-shadow: 0 0 8px #fff;
+    }
+    .leaflet-grab {
+        cursor: auto;
+        }
+
+    .leaflet-dragging .leaflet-grab{
+        cursor: move;
+        }
+    .coordinate{
+            position: absolute;
+            bottom: 6px;
+            left: 7%;
+            background-color: #e7e4dd8a;
+            border: 1px;
+            font-size: 11px;
+    }
+    .icon {
+            display: inline-block;
+            height: 20px;
+            width: 20px;
+          }
+
+    /* ICONS */
+    .icon-alarmas {
+            background: url('libs/images/alarma.png') center center no-repeat;
+            }
+    .icon-cámaras {
+            background: url('libs/images/camara.png') center center no-repeat;
+            }
+    
+    .cámaras.search-tip b {
+        background: rgba(146, 146, 146, 0.753);
+        margin-left: 20px;
+        display: inline-block;
+        clear: left;
+        padding: 0 4px;
+    }
+    .alarmas.search-tip b {
+        background: rgba(69, 112, 151, 0.753);
+        margin-left: 60px;
+        display: inline-block;
+        clear: left;
+        padding: 0 4px;
+    }
+    .barrios.search-tip b {
+        background: rgba(88, 151, 69, 0.753);
+        margin-left: 60px;
+        display: inline-block;
+        clear: left;
+        padding: 0 4px;
+    }
+</style>
+
+<body>
+
+    <!-- Encabezado -->
+     <header class="">
+        <nav class="navbar navbar-expand-lg">
+          <div class="container">
+            <img src="libs/images/logo_espe.png" alt>
+            <img src="libs/images/ecu.png" alt>
+            <a class="navbar-brand" href="index.html"><h2> Geoportal de Delitos <em>Chimbacalle</em></h2></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="true" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="geoservicios.html">Geoservicios</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="http://localhost:8080/geonetwork/srv/spa/catalog.search#/home">Catálogo de Metadatos</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="index.html">Geovisor</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="cesium.html">Visor 3D</a>
+                  </li>
+                <!-- Barra de navegación-->
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end" >
+                      <nav class="sb-sidenav accordion sb-sidenav-dark"style="margin-left: 0px;"id="sidenavAccordion">     
+                        <a class="nav-link" href="http://localhost:8012/Geoportal/contacts.html">Inicio</a>     
+                          <a class="nav-link" href="http://localhost:8012/Geoportal/login.php">Cerrar  Sesión</a>
+                      </nav> 
+                </ul>
+                </li>
+                </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <!-- Fin Encabezado -->
+
+
+        <!-- Contenido de la página -->
+        <div id="cesiumContainer" class="fullSize"></div>
+        <div id="toolbar"></div>
+   	    <script type="text/javascript">
+     
+        // Token de acceso
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmZTBiYmY2MS1kMjY4LTQxNWMtYWI5OS1hN2Y5OTU5ZGE0NzEiLCJpZCI6NDY0MDMsImlhdCI6MTYxNjA5ODYxMH0.A3JBolS6zIKyoN1oEh7CZsmWnoUepcqvlgkuPPyc5XY';
+
+        // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
+        const viewer = new Cesium.Viewer('cesiumContainer', {
+        terrainProvider: Cesium.createWorldTerrain(),
+        });    
+        // Agrega Cesium OSM Buildings, una capa de edificios 3D global
+        const buildingTileset = viewer.scene.primitives.add(Cesium.createOsmBuildings());   
+        // Vuela la cámara a la longitud, latitud y altura indicadas
+        viewer.camera.flyTo({
+        destination : Cesium.Cartesian3.fromDegrees(-78.510,-0.252, 3000),
+        duration:5,
+        orientation : {
+        heading : Cesium.Math.toRadians(15.0),
+         pitch : Cesium.Math.toRadians(-5.0),
+        }
+        });
+
+        viewer.scene.primitives.add(Cesium.createOsmBuildings({
+        style: new Cesium.Cesium3DTileStyle({
+            color: {
+            conditions: [
+                ["${feature['building']} === 'hospital'", "color('#0000FF')"],
+                ["${feature['building']} === 'school'", "color('#00FF00')"],
+                ["${feature['name']} === 'Teatro Real'", "color('#A52A2A')"],
+                [true, "color('#ffffff')"]
+            ]
+            }
+        })
+        }));
+
+        viewer.camera.setView({
+            destination : Cesium.Cartesian3.fromDegrees(-78.510,-0.252, 3000),
+        });
+
+
+    // MENÚ DE CONTRO DE CAPAS WMS
+     
+    Sandcastle.addToolbarMenu(
+        [{
+            text: "Seleccionar capa",
+            onselect: function() {
+            }
+            },
+            { 
+                text: "Parroquia Chimbacalle",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:Parroquia_Chimbacalle',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "Barrios",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:Barrios',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+            text: "Unidades constructivas",
+            onselect: function() {
+                var imageryLayers = viewer.imageryLayers;
+                imageryLayers.addImageryProvider(
+                 new Cesium.WebMapServiceImageryProvider({
+                    url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                    layers: 'chimbacalle:construcciones',
+                    parameters: {
+                    transparent: true,
+                    format: "image/png",
+                },
+            })
+            );
+            }
+            },
+
+            {
+            text: "Construcciones archivo geoJSON",
+            onselect: function() {
+                Cesium.Math.setRandomNumberSeed(0);
+                var promise = Cesium.GeoJsonDataSource.load(
+                    "./libs/geojson/construcciones.geojson"
+                 
+                );
+                promise
+                    .then(function(dataSource) {
+                        viewer.dataSources.add(dataSource);
+
+                        //Get the array of entities
+                        var entities = dataSource.entities.values;
+
+                        var colorHash = {};
+                        for (var i = 0; i < entities.length; i++) {
+                            //For each entity, create a random color based on the state name.
+                            //Some states have multiple entities, so we store the color in a
+                            //hash so that we use the same color for the entire state.
+                            var entity = entities[i];
+                            var uso = entity.id;
+                            var color = colorHash[uso];
+                            if (!color) {
+                                color = Cesium.Color.fromRandom({
+                                    alpha: 1.0,
+                                });
+                                colorHash[uso] = color;
+                            }
+
+                            //Set the polygon material to our random color.
+                            entity.polygon.material = color;
+                            //Remove the outlines.
+                            entity.polygon.outline = false;
+
+                            //Extrude the polygon based on the state's population.  Each entity
+                            //stores the properties for the GeoJSON feature it was created from
+                            //Since the population is a huge number, we divide by 50.
+                            entity.polygon.extrudedaltura =
+                                entity.properties.altura*10.0;
+                        }
+                    })
+                    .otherwise(function(error) {
+                        //Display any errrors encountered while loading.
+                        window.alert(error);
+                    });
+
+                var rectangle = Cesium.Rectangle.fromDegrees(-78.53, -0.283, -78.43, -0.203);
+                }
+            },
+
+
+            {
+            text: "Construcciones geoservicio geojson",
+            onselect: function() {
+                Cesium.Math.setRandomNumberSeed(0);
+                var promise = Cesium.GeoJsonDataSource.load(
+                    "http://localhost:8080/geoserver/chimbacalle/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=chimbacalle%3Aconstrucciones&outputFormat=application%2Fjson"
+                );
+                promise
+                    .then(function(dataSource) {
+                        viewer.dataSources.add(dataSource);
+
+                        //Get the array of entities
+                        var entities = dataSource.entities.values;
+
+                        var colorHash = {};
+                        for (var i = 0; i < entities.length; i++) {
+                            var entity = entities[i];
+                            var uso = entity.uso;
+                            var color = colorHash[uso];
+                            if (!color) {
+                                color = Cesium.Color.fromRandom({
+                                    alpha: 1.0,
+                                });
+                                colorHash[uso] = color;
+                            }
+
+                            //Set the polygon material to our random color.
+                            entity.polygon.material = color;
+                        
+
+                            //Extrude the polygon based on the state's population.  Each entity
+                            //stores the properties for the GeoJSON feature it was created from
+                            //Since the population is a huge number, we divide by 50.
+                            entity.polygon.extrudedHeight =
+                                entity.properties.altura*5;
+                        }
+                    })
+                    .otherwise(function(error) {
+                        //Display any errrors encountered while loading.
+                        window.alert(error);
+                    });
+
+                var rectangle = Cesium.Rectangle.fromDegrees(-78.5,-0.24, -78.3,-0.22);
+            }
+            },
+
+            {
+            text: "Árboles",
+            onselect: function() {
+                var imageryLayers = viewer.imageryLayers;
+                imageryLayers.addImageryProvider(
+                 new Cesium.WebMapServiceImageryProvider({
+                    url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                    layers: 'chimbacalle:arboles',
+                    parameters: {
+                    transparent: true,
+                    format: "image/png",
+                },
+            })
+            );
+            }
+            },
+
+            {
+                text: "Cámaras existentes",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:camaras_existentes',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "Alarmas existentes",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:alarmas_existentes',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "Ortofoto",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:Ortofoto',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "MDT",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:MDT',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            //Capas del análisis espacial del sistema de monitoreo delictivo
+            {
+                text: "Cámaras propuestas",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:camaras_propuestas',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "Alarmas propuestas",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:alarmas_propuestas',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "Cuencas auditivas alarmas existentes",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:cuencas_auditivas_alarmas_existentes',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "Cuencas auditivas alarmas propuestas",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:cuencas_auditivas_alarmas_propuestas',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "Cuencas visuales cámaras existentes",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:cuencas_visuales_camaras_existentes',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "Cuencas visuales cámaras propuestas",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:cuencas_visuales_camaras_propuestas',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "Líneas de visión cámaras existentes",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:lineas_de_vision_camaras_existentes',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "Líneas de visión cámaras propuestas",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:lineas_de_vision_camaras_propuestas',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "MDS",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:MDS',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "Mapa de calor emergencias 2018",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:heatmap_emergencias_2018',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "Mapa de calor emergencias 2019",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:heatmap_emergencias_2019',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },
+
+            {
+                text: "Mapa de calor emergencias 2020",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:heatmap_emergencias_2020',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            },  
+
+            //Emergencias SIS ECU 911
+             {
+                text: "Delitos 2018",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:delitos_2018',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            }, 
+
+            {
+                text: "Delitos 2019",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:delitos_2019',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            }, 
+
+            {
+                text: "Delitos 2020",
+                onselect: function() {
+                    var imageryLayers = viewer.imageryLayers;
+                    imageryLayers.addImageryProvider(
+                    new Cesium.WebMapServiceImageryProvider({
+                        url: "http://localhost:8080/geoserver/chimbacalle/wms?",
+                        layers: 'chimbacalle:delitos_2020',
+                        parameters: {
+                        transparent: true,
+                        format: "image/png",
+                    },
+                })
+            );
+            }
+            }, 
+
+            //Capas geojson
+
+        {
+            text: "Quitar todo",
+            onselect: function() {
+                viewer.dataSources.removeAll();
+                
+            }
+        }
+    ],
+    "toolbar"
+);
+
+Sandcastle.reset = function() {
+    viewer.dataSources.removeAll();
+};
+
+//BOTÓN
+
+  Sandcastle.addToolbarButton("cámaras propuestas", function () {
+  viewer.dataSources.add(
+    Cesium.GeoJsonDataSource.load(
+        "./libs/geojson/camaraspropuestas.geojson",
+    )
+  );
+});
+
+	</script>
+
+    <!-- Leyenda Mapas de calor -->
+    <div id="legend" style="display: block;">
+        <div><span class="legend-colorBlock" style="background: #0e6829"></span>Muy Baja</div>
+        <div><span class="legend-colorBlock" style="background: #83d024"></span>Baja</div>
+        <div><span class="legend-colorBlock" style="background: #ffff01"></span>Media</div>
+        <div><span class="legend-colorBlock" style="background: #ff7f07"></span>Alta</div>
+        <div><span class="legend-colorBlock" style="background: #f00004"></span>Muy Alta</div>
+    </div>
+
+  </body>
+</html>
